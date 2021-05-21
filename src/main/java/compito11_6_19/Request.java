@@ -5,7 +5,7 @@ public class Request {
     private int finalized_value; //valore dopo essere stato eleaborato
     private final Requester requesterthreadreference; //reference al requester per segnalare la fine dell'operazione
     private long Sent_Date; //data di invio dal requester
-    private long Received_Date; //danta di ricezione dal worker
+    private long Received_Date; //data di ricezione dal worker
 
     public Request(int value, Requester requesterthreadreference) {
         this.sentvalue = value;
