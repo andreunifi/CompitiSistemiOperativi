@@ -66,7 +66,7 @@ public class Requester extends Thread{
     }
 
 
-    /*
+    /*OLDER CODE, IGNORE
 
     Request req= new Request(counter.getValue(),this);
             iswaiting=true;
