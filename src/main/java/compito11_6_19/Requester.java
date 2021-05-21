@@ -3,7 +3,7 @@ package compito11_6_19;
 import java.util.concurrent.Semaphore;
 
 public class Requester extends Thread{
-    private Limited_Shared_Queue queue; //coda delle richiesete
+    private Limited_Shared_Queue queue; //coda delle richieste
     private Shared_Counter_Requester counter; //counter condiviso con i vari thread
     private Request sentrequest; //richiesta inviata
     private Request finalizedrequest; //richiesta ricevuta
