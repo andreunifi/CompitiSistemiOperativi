@@ -31,7 +31,7 @@ public class Requester extends Thread{
                 }else{
                     //il thread ha ricevuto una risposta
                     //FIXME iswaiting è sempre true anche dopo che il worker ha preso in carico la richiesta,
-                    //FIXME l'ha eseguita e ha settato iswaiting=true tramite la reference a questo thread.
+                    //FIXME l'ha eseguita e ha settato iswaiting=false tramite la reference a questo thread.
                     System.out.println("Requester " + this.getName() + " has received back the finalized request."
                                     + "\nInitial value is: " + finalizedrequest.getSentvalue()+" , finalized value is " + finalizedrequest.
                                     getFinalized_value() + " and time passed was " + String.valueOf(finalizedrequest.getReceived_Date() - finalizedrequest.getSent_Date()));
