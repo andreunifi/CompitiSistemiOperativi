@@ -17,7 +17,7 @@ public class WorkerManager {
             work.start();
         }
         notbusyworkers= new Semaphore(size);
-        //inizializzazione dei worker del semaforo.
+        //inizializzazione dei worker e del semaforo.
     }
 
 
