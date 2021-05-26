@@ -7,7 +7,7 @@ public class Requester extends Thread{
     private Shared_Counter_Requester counter; //counter condiviso con i vari thread
     private Request sentrequest; //richiesta inviata
     private Request finalizedrequest; //richiesta ricevuta
-    public boolean iswaiting=true; //booleano che indica se il thread sta aspettando una risposta dal worker
+    public volatile boolean iswaiting=true; //booleano che indica se il thread sta aspettando una risposta dal worker
     //è uguale a true perchè all'inizio invio subito una richiesta. Verrò modificato in seguito dall'apposito
     //worker che tramite una reference allo specifico Thread Requester modificherà il booleano in false.
 
