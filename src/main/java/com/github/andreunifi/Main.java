@@ -23,16 +23,17 @@ public class Main {
         GeneratorThread[] generatorThreads= new GeneratorThread[N];
         for(int i=0;i<N;i++){
             generatorThreads[i]= new GeneratorThread(queue,3);
-            generatorThreads[i].setName(String.valueOf(i));
+            generatorThreads[i].setName(String.valueOf(i));   //inizializzazione dei Thread Generator
             generatorThreads[i].start();
         }
         for(int i=0;i<K;i++){
             threads[i]= new ConsumerThread(queue,manager,i);
-            threads[i].setName(String.valueOf(i));
+            threads[i].setName(String.valueOf(i)); //inizializzazione dei thread Consumer
             threads[i].start();
         }
         int counter=0;
-        while (counter<=20){
+        while (counter<=20){ //poichè voglio che il thread principale stampi tutte le informazioni richieste una volta al secondo per 20 secondi, mi basta un contatore che
+            //mi indichi quando ho finito i 20 secondi richiesti -> esco dal ciclo allora
             System.out.println("Numero messaggi in coda: " +queue.numMex);
             String numMex="";
             for(int i=0;i<K;i++)
@@ -44,16 +45,16 @@ public class Main {
         }
 
         for(int i=0;i<N;i++){
-            generatorThreads[i].interrupt();
+            generatorThreads[i].interrupt(); //interruzione dei thread generator
             generatorThreads[i].join();
         }
 
         for(int i=0;i<K;i++){
-            threads[i].interrupt();
+            threads[i].interrupt(); //interrupt dei thread Consumer
 
         }
         for(int i=0;i<K;i++){
-            threads[i].join();
+            threads[i].join();                    //FIXME il thread principale non stampa mai da qui in poi
             System.out.println(threads[i].getName() + " ha elaborato: " + threads[i].numMexProcessed);
         }
         System.out.println("Le risorse a sono: " + manager.returnSizeA() + " e le risorse b sono: " + manager.returnSizeB());
