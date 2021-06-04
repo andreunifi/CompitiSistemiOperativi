@@ -19,18 +19,25 @@ public class Main {
 
 
     public static void main(String[] args){
-        RequestQueue queue= new RequestQueue(10);
-        Client[] clients= new Client[5];
-        Worker[] workers= new Worker[4];
+        int N=5;
+        int M=4;
+        int K=10;
+        int nA=8;
+        int nB=5;
+        int T1=1; //1*1000 millsecondi
+        int T2=2; //2*1000 millisecondi
+        RequestQueue queue= new RequestQueue(K);
+        Client[] clients= new Client[N];
+        Worker[] workers= new Worker[M];
 
-        for (int i=0;i<5;i++){
+        for (int i=0;i<N;i++){
             clients[i]= new Client(queue);
             clients[i].setName(String.valueOf(i));
             clients[i].start();
         }
-        ResourceManager manager= new ResourceManager(10,3);
+        ResourceManager manager= new ResourceManager(10,5);
         GestoreClient gestore= new GestoreClient(clients);
-        for(int i=0;i<4;i++){
+        for(int i=0;i<M;i++){
             workers[i]= new Worker(queue,gestore,1,2,manager);
             workers[i].start();
         }
@@ -38,20 +45,27 @@ public class Main {
 
         try {
             Thread.sleep(10000);
-            for(int i=0;i<5;i++){
+            for(int i=0;i<N;i++){
                 clients[i].interrupt();
 
             }
-            for(int i=0;i<5;i++)
+            for(int i=0;i<N;i++)
                 clients[i].join();
 
-            gestore.stampaThread();
 
-            for(int i=0;i<4;i++){
+
+            for(int i=0;i<M;i++){
                 workers[i].interrupt();
-                workers[i].join();
+
             }
+
+            for(int i=0;i<M;i++)
+                workers[i].join();
+
+
+            gestore.stampaThread();
             System.out.println("Risorse a:"+ manager.nA + " Risorse b:" + manager.nB);
+
         }catch (InterruptedException ie){
             ie.printStackTrace();
         }

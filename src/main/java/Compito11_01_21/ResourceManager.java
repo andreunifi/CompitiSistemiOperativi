@@ -26,7 +26,6 @@ public class ResourceManager {
             returned=risorseB.remove(0);
 
         }
-        notifyAll(); //notifico la rimozione di una risorsa
         return returned;
     }
 
@@ -40,10 +39,10 @@ public class ResourceManager {
         notifyAll(); //notifico l'aggiunta della risorsa
     }
 
-    public int returnSizeA(){
+    public synchronized int returnSizeA(){
         return risorseA.size();
     }
-    public int returnSizeB(){
+    public synchronized int returnSizeB(){
         return risorseA.size();
     }
 

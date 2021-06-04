@@ -28,13 +28,16 @@ public class Client extends Thread{
                 queue.put(req);
                 valoreinviato=value;
                 tempoinviato=System.currentTimeMillis();
-                numerorichieste++;
+
 
 
                 isDone.acquire();
+
                 System.out.println("La richiesta del thread " + this.getName() +
                         " è stata completata in: " + (this.temporitorno - this.tempoinviato) + " millisecondi"
                 + ", con valore inviato: " + this.valoreinviato + " e con valore ricevuto: " + this.valorericevuto);
+
+                numerorichieste++;
                 long delay=this.temporitorno-tempoinviato;
                 if(delay<min)
                     min=delay;

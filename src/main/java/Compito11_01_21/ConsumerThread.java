@@ -23,18 +23,22 @@ public class ConsumerThread extends Thread{
     public void run() {
         try {
             while (true){
-                resource=manager.getresource(); // cerco di ottenere una risorsa a, altrimenti una b
+                resource=manager.getresource();
+                try{
+                    Messaggio m= queue.getMessaggio(type);
+                    //System.out.println(getName() + " ha elaborato il messaggio " + m.id);
+                    numMexProcessed++;
+                    //ho finito di processare il messaggio, rilascio la risorsa richiesta
+                }catch (InterruptedException interruptedException){}finally {
+                    manager.releaseResource(resource);
+                    // cerco di ottenere una risorsa a, altrimenti una b
+                }
                 //System.out.println(getName() + " ha acquisito una risorsa di tipo " + resource.getResourceType());
-                Messaggio m= queue.getMessaggio(type);
-                //System.out.println(getName() + " ha elaborato il messaggio " + m.id);
-                numMexProcessed++;
-                manager.releaseResource(resource); //ho finito di processare il messaggio, rilascio la risorsa richiesta
+
                 sleep(10);
+                manager.releaseResource(resource);
             }
         }catch (InterruptedException ie){}
-        finally {
-            manager.releaseResource(resource); //in caso di InterruptedException, voglio che il thread rilasci comunque la risorsa
-        }
 
 
     }
