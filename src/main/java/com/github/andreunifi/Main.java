@@ -1,11 +1,15 @@
 package com.github.andreunifi;
 
-import Compito08_02_21.Consumer;
-import Compito08_02_21.Device;
-import Compito08_02_21.DevicesStatus;
-import Compito08_02_21.Reader;
+import Compito10_6_20.PriorityResourceManaer;
+import Compito10_6_20.RequesterThread;
 import Compito11_01_21.*;
-import Compito25_11_20.*;
+import Compito16_09_20.*;
+import Compito23_06_20.Message;
+import Compito23_06_20.MessageQueue;
+import Compito23_06_20.OutputQueue;
+import Compito23_06_20.ProcessorThread;
+import CompitoCorrezione.*;
+import CompitoCorrezione.ResourceManager;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,54 +18,43 @@ import java.util.Random;
 public class Main {
 
 
-    public static void main(String[] args) throws InterruptedException, FileNotFoundException {
-        int N=5;
-        int K=3;
-        MessageQueue queue= new MessageQueue();
-        ResourceManager manager= new ResourceManager(2,23);
-        ConsumerThread[] threads= new ConsumerThread[K];
-        GeneratorThread[] generatorThreads= new GeneratorThread[N];
-        for(int i=0;i<N;i++){
-            generatorThreads[i]= new GeneratorThread(queue,3);
-            generatorThreads[i].setName(String.valueOf(i));   //inizializzazione dei Thread Generator
-            generatorThreads[i].start();
+    public static void main(String[] args){
+        RequestQueue queue= new RequestQueue(10);
+        Client[] clients= new Client[5];
+        Worker[] workers= new Worker[4];
+
+        for (int i=0;i<5;i++){
+            clients[i]= new Client(queue);
+            clients[i].setName(String.valueOf(i));
+            clients[i].start();
         }
-        for(int i=0;i<K;i++){
-            threads[i]= new ConsumerThread(queue,manager,i);
-            threads[i].setName(String.valueOf(i)); //inizializzazione dei thread Consumer
-            threads[i].start();
-        }
-        int counter=0;
-        while (counter<=20){ //poichè voglio che il thread principale stampi tutte le informazioni richieste una volta al secondo per 20 secondi, mi basta un contatore che
-            //mi indichi quando ho finito i 20 secondi richiesti -> esco dal ciclo allora
-            System.out.println("Numero messaggi in coda: " +queue.numMex);
-            String numMex="";
-            for(int i=0;i<K;i++)
-                numMex+="\nConsumer" + threads[i].getName() + " ha consumato " + threads[i].numMexProcessed;
-            System.out.println(numMex);
-            System.out.println("Le risorse a sono: " + manager.returnSizeA() + " e le risorse b sono: " + manager.returnSizeB());
-            counter++;
-            Thread.sleep(1000);
+        ResourceManager manager= new ResourceManager(10,3);
+        GestoreClient gestore= new GestoreClient(clients);
+        for(int i=0;i<4;i++){
+            workers[i]= new Worker(queue,gestore,1,2,manager);
+            workers[i].start();
         }
 
-        for(int i=0;i<N;i++){
-            generatorThreads[i].interrupt(); //interruzione dei thread generator
-            generatorThreads[i].join();
+
+        try {
+            Thread.sleep(10000);
+            for(int i=0;i<5;i++){
+                clients[i].interrupt();
+
+            }
+            for(int i=0;i<5;i++)
+                clients[i].join();
+
+            gestore.stampaThread();
+
+            for(int i=0;i<4;i++){
+                workers[i].interrupt();
+                workers[i].join();
+            }
+            System.out.println("Risorse a:"+ manager.nA + " Risorse b:" + manager.nB);
+        }catch (InterruptedException ie){
+            ie.printStackTrace();
         }
-
-        for(int i=0;i<K;i++){
-            threads[i].interrupt(); //interrupt dei thread Consumer
-
-        }
-        for(int i=0;i<K;i++){
-            threads[i].join();                    //FIXME il thread principale non stampa mai da qui in poi
-            System.out.println(threads[i].getName() + " ha elaborato: " + threads[i].numMexProcessed);
-        }
-        System.out.println("Le risorse a sono: " + manager.returnSizeA() + " e le risorse b sono: " + manager.returnSizeB());
-
-
-
-
 
 
 
@@ -74,6 +67,4 @@ public class Main {
 
 
     }
-
-
 }
