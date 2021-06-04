@@ -35,10 +35,10 @@ public class Main {
             clients[i].setName(String.valueOf(i));
             clients[i].start();
         }
-        ResourceManager manager= new ResourceManager(10,5);
+        ResourceManager manager= new ResourceManager(nA,nB);
         GestoreClient gestore= new GestoreClient(clients);
         for(int i=0;i<M;i++){
-            workers[i]= new Worker(queue,gestore,1,2,manager);
+            workers[i]= new Worker(queue,gestore,T1,T2,manager);
             workers[i].start();
         }
 

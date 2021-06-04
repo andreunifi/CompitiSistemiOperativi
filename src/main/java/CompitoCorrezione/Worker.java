@@ -25,11 +25,11 @@ public class Worker extends Thread {
                     sleep(T1*1000);
                     rm.getResourceB();
                     try {
-                        sleep(T2*1000);
+                        sleep(T2 * 1000);
                     }finally {
                         rm.releaseResourceB();
                     }
-                }finally {
+                } finally {
                     rm.releaseResourceA();
                 }
 
