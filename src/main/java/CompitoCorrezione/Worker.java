@@ -45,34 +45,3 @@ public class Worker extends Thread {
         } catch (InterruptedException ie) {}
     }
 }
-
-/*
-while (true){
-                Request r= q.get();
-                rm.getResourceA();
-                try{
-                    sleep(T1*1000);
-                    rm.getResourceB();
-                    try{
-                        sleep(T2*1000);
-                        Client client=gc.getClient(r.thread_id);
-                        client.temporitorno=System.currentTimeMillis();
-                        client.valorericevuto= (r.value*2);
-                        client.isDone.release();
-                        rm.releaseResourceA();
-                        rm.releaseResourceB();
-
-                    }catch (InterruptedException ie){}
-                    finally {
-                        rm.releaseResourceA();
-                        rm.releaseResourceB();
-                    };
-                }catch (InterruptedException ie){}
-                finally {
-                    rm.releaseResourceA();
-
-                }
-
-
-            }
- */
